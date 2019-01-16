@@ -5,12 +5,6 @@ import java.util.*;
 
 public class Properties extends java.util.Properties {
 	
-	//Property names
-	private final static String ZMQ_PORT = "zmq_port";
-
-	//Property defaults
-	private final static int DEFAULT_ZMQ_PORT = 5561;
-
 	public Properties() {
 		setRequiredProps();	
 	}
@@ -27,12 +21,13 @@ public class Properties extends java.util.Properties {
 	}
 
 	public int getZmqPort() {
-		return Integer.parseInt(getProperty(ZMQ_PORT, Integer.toString(DEFAULT_ZMQ_PORT)).trim());
+		return Integer.parseInt(getProperty(Constants.ZMQ_PORT_PROPERTY, Integer.toString(Constants.DEFAULT_ZMQ_PORT)).trim());
 	}
 
 	public void setZmqPort(final int zmqPort) {
-		put(ZMQ_PORT, Integer.toString(zmqPort));
+		put(Constants.ZMQ_PORT_PROPERTY, Integer.toString(zmqPort));
 	}
+
     public void load(final String propertiesFilePath) {
         FileInputStream inputStream = null;
         try {
@@ -90,8 +85,8 @@ public class Properties extends java.util.Properties {
     }
 
 	private void setRequiredProps() {
-		if (get(ZMQ_PORT) == null) {
-			put(ZMQ_PORT, DEFAULT_ZMQ_PORT);
+		if (get(Constants.ZMQ_PORT_PROPERTY) == null) {
+			put(Constants.ZMQ_PORT_PROPERTY, Integer.toString(Constants.DEFAULT_ZMQ_PORT));
 		}
 	}
 }

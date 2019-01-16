@@ -11,7 +11,6 @@ enum STATE {
 	TERMINATING	
 }
 
-
 public class IctmonIxi extends IxiModule {
 	private STATE state = STATE.TERMINATED;
 	private Properties properties;
