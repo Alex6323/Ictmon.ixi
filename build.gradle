@@ -1,0 +1,27 @@
+plugins {
+	id 'java'
+}
+
+group 'com.ictmon'
+version '0.1'
+
+sourceCompatibility = 1.7
+repositories {
+	mavenCentral()
+	maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compile 'com.github.iotaledger:ict:ffd5d510e6ea29584badeba6c4b507da4e0a6b99'
+	compile 'com.github.zeromq:jeromq:v0.4.3'
+}
+
+task fatJar(type: Jar) {
+	manifest {
+		attributes 'Main-Class': 'com.ictmon.ixi.IctmonIxi'
+	}
+	baseName = 'ictmon.ixi'
+	destinationDir = file("$rootDir/")
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	with jar
+}

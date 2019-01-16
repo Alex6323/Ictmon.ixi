@@ -1,0 +1,9 @@
+{
+	"name": "Ictmon.ixi",
+	"version": "0.1",
+	"main_class": "org.iota.ict.ixi.IctmonIxi",
+	"description": "This IXI module publishes relevant transaction data (e.g. hash, address, tag, value) for the Ict Network monitor (ictmon) via ZeroMQ, which in turn can use this information to calculate network metrics like transactions-per-second (tps).",
+	"repository": "Alex6323/Ictmon.ixi",
+	"gui_port": -1,
+	"supported_versions": ["0.1"]
+}
