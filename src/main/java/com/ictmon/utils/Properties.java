@@ -1,9 +1,14 @@
 package com.ictmon.ixi.utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.util.*;
 
 public class Properties extends java.util.Properties {
+
+	private final static Logger LOGGER = LogManager.getLogger(Properties.class);
 	
 	public Properties() {
 		setRequiredProps();	
@@ -13,11 +18,12 @@ public class Properties extends java.util.Properties {
 		
 		File propertiesLocation = new File(Constants.PROPERTIES_LOCATION);
 		if (propertiesLocation.mkdirs()) {
-			//LOGGER: create properties folder
+			LOGGER.info(String.format("Created properties folder at:\n%s", propertiesLocation.getAbsolutePath()));
 		}
 
 		load(propertiesFilePath);
 		setRequiredProps();
+		validateProps();
 	}
 
 	public int getZmqPort() {
@@ -35,11 +41,10 @@ public class Properties extends java.util.Properties {
             load(inputStream);
 
         } catch (final FileNotFoundException e) {
-            //LOGGER.info(String.format("Could not read properties file '%s', therefore a new one will be created.",
-                    //propertiesFilePath));
+            LOGGER.info(String.format("Could not read properties file '%s', therefore a new one will be created.", propertiesFilePath));
+
         } catch (final IOException e) {
-            //LOGGER.error(String.format("Failed to open input stream of file: '%s'",
-                    //propertiesFilePath));
+            LOGGER.error(String.format("Failed to open input stream of file: '%s'", propertiesFilePath));
             e.printStackTrace();
 
         } finally {
@@ -47,8 +52,7 @@ public class Properties extends java.util.Properties {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    //LOGGER.error(String.format("Failed to close input stream of file: '%s'",
-                            //propertiesFilePath));
+                    LOGGER.error(String.format("Failed to close input stream of file: '%s'", propertiesFilePath));
                     e.printStackTrace();
                 }
             }
@@ -62,22 +66,20 @@ public class Properties extends java.util.Properties {
             store(outputStream, null);
 
         } catch (final FileNotFoundException e) {
-            //LOGGER.error(String.format("Failed to open output stream of file: '%s'",
-            //        propertiesFilePath));
+            LOGGER.error(String.format("Failed to open output stream of file: '%s'", propertiesFilePath));
             e.printStackTrace();
 
         } catch (final IOException e) {
-            //LOGGER.error(String.format("Failed to save properties to file: '%s'",
-            //        propertiesFilePath));
+            LOGGER.error(String.format("Failed to save properties to file: '%s'", propertiesFilePath));
             e.printStackTrace();
 
         } finally {
             if (outputStream != null) {
                 try {
                     outputStream.close();
+
                 } catch (IOException e) {
-                    //LOGGER.error(String.format("Failed to close output stream of file: '%s'",
-                    //        propertiesFilePath));
+                    LOGGER.error(String.format("Failed to close output stream of file: '%s'", propertiesFilePath));
                     e.printStackTrace();
                 }
             }
@@ -88,5 +90,14 @@ public class Properties extends java.util.Properties {
 		if (get(Constants.ZMQ_PORT_PROPERTY) == null) {
 			put(Constants.ZMQ_PORT_PROPERTY, Integer.toString(Constants.DEFAULT_ZMQ_PORT));
 		}
+	}
+
+	private void validateProps() {
+		int port = getZmqPort();
+		if (port <= 1024 || port > 65535) {
+			LOGGER.info("Specified port '%d' exceeds the allowed range. Using default port '%d'.", port, Constants.DEFAULT_ZMQ_PORT);
+
+			setZmqPort(Constants.DEFAULT_ZMQ_PORT);
+		} 
 	}
 }

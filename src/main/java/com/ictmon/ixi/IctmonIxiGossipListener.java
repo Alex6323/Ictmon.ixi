@@ -6,7 +6,12 @@ import org.iota.ict.network.event.GossipFilter;
 import org.iota.ict.network.event.GossipListener;
 import org.zeromq.ZMQ;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class IctmonIxiGossipListener extends GossipListener {
+
+	private final static Logger LOGGER = LogManager.getLogger(IctmonIxiGossipListener.class);
 	private final GossipFilter filter = new GossipFilter();
 	private final ZMQ.Context context = ZMQ.context(1);
 	private final ZMQ.Socket publisher = context.socket(ZMQ.PUB);
@@ -22,13 +27,14 @@ public class IctmonIxiGossipListener extends GossipListener {
 			Thread.sleep(500);
 	
 		} catch (Exception e) {
-			// TODO: logger
+			LOGGER.error("Failed to bind publisher to port '%d'.", zmqPort);
 		}
 
 	}
 
 	@Override
 	public void onGossipEvent(final GossipEvent event) {
+
 		//should not be required
 		//if (!filter.passes(event.getTransaction())) return;
 	
@@ -67,7 +73,7 @@ public class IctmonIxiGossipListener extends GossipListener {
 			publisher.send(data.toString());
 
 		} catch (Exception e) {
-			//TODO: add logger
+			LOGGER.error("Failed publishing data.");
 		}
 	}
 }

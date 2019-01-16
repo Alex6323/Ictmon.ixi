@@ -4,6 +4,9 @@ import com.ictmon.ixi.IctmonIxiGossipListener;
 import com.ictmon.ixi.utils.Constants;
 import com.ictmon.ixi.utils.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 enum STATE {
 	TERMINATED,
 	INITIALIZING,
@@ -12,6 +15,8 @@ enum STATE {
 }
 
 public class IctmonIxi extends IxiModule {
+	
+	private final static Logger LOGGER = LogManager.getLogger(IctmonIxi.class);
 	private STATE state = STATE.TERMINATED;
 	private Properties properties;
 	
@@ -22,17 +27,17 @@ public class IctmonIxi extends IxiModule {
 	@Override
 	public void terminate() {
 		state = STATE.TERMINATING;
-		//LOGGER
+		LOGGER.info("Terminating Ictmon.ixi...");
 		super.terminate();
 		state = STATE.TERMINATED;
-		//LOGGER
+		LOGGER.info("Ictmon.ixi terminated.");
 	}
 
 	@Override
 	public void run() {
 		state = STATE.INITIALIZING;
 
-		//LOGGER: Ictmon.ixi starting...
+		LOGGER.info(String.format("Ictmon.ixi $s: Starting...", Constants.VERSION));
 		properties = new Properties(Constants.PROPERTIES_FILE);
 		properties.store(Constants.PROPERTIES_FILE);		
 
@@ -40,7 +45,7 @@ public class IctmonIxi extends IxiModule {
 
 		ixi.addGossipListener(new IctmonIxiGossipListener(properties.getZmqPort()));
 
-		//LOGGER: Ictmon.ixi started on port ....
+		LOGGER.info(String.format("Ictmon.ixi %s: Started on port: %d", Constants.VERSION, properties.getZmqPort()));
 	}
 
 	public boolean isRunning() {
