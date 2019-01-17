@@ -25,6 +25,8 @@ public class IctmonIxiGossipListener extends GossipListener {
 			
 			// necessary?
 			Thread.sleep(500);
+
+			LOGGER.info("Successfully bound publisher to port '%d'.", zmqPort);
 	
 		} catch (Exception e) {
 			LOGGER.error("Failed to bind publisher to port '%d'.", zmqPort);
@@ -35,9 +37,10 @@ public class IctmonIxiGossipListener extends GossipListener {
 	@Override
 	public void onGossipEvent(final GossipEvent event) {
 
-		//should not be required
+		//should not be required, because we want it all
 		//if (!filter.passes(event.getTransaction())) return;
-	
+		
+		//System.out.printf(".");
 		if (event.isOwnTransaction()) {
 			handleOutbound(event.getTransaction());
 		} else {
@@ -46,12 +49,10 @@ public class IctmonIxiGossipListener extends GossipListener {
 	}
 
 	private void handleOutbound(final Transaction tx) {
-		//trySendData("out".getBytes("UTF-8"), tx);
 		trySendData("out".getBytes(), tx);
 	}
 
 	private void handleInbound(final Transaction tx) {
-		//trySendData("in".getBytes("UTF-8"), tx);
 		trySendData("in".getBytes(), tx);
 	}
 

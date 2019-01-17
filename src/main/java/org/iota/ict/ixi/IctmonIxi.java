@@ -37,7 +37,7 @@ public class IctmonIxi extends IxiModule {
 	public void run() {
 		state = STATE.INITIALIZING;
 
-		LOGGER.info(String.format("Ictmon.ixi $s: Starting...", Constants.VERSION));
+		LOGGER.info(String.format("Ictmon.ixi %s: Starting...", Constants.VERSION));
 		properties = new Properties(Constants.PROPERTIES_FILE);
 		properties.store(Constants.PROPERTIES_FILE);		
 

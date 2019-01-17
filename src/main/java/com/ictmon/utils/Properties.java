@@ -19,7 +19,7 @@ public class Properties extends java.util.Properties {
 		File propertiesLocation = new File(Constants.PROPERTIES_LOCATION);
 		if (propertiesLocation.mkdirs()) {
 			LOGGER.info(String.format("Created properties folder at:\n%s", propertiesLocation.getAbsolutePath()));
-		}
+		} 
 
 		load(propertiesFilePath);
 		setRequiredProps();
