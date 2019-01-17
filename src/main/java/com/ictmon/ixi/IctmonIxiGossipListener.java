@@ -25,8 +25,6 @@ public class IctmonIxiGossipListener extends GossipListener {
 			
 			// necessary?
 			Thread.sleep(500);
-
-			LOGGER.info("Successfully bound publisher to port '%d'.", zmqPort);
 	
 		} catch (Exception e) {
 			LOGGER.error("Failed to bind publisher to port '%d'.", zmqPort);
